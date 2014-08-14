@@ -20,6 +20,19 @@ function drawCircle(row, col, style) {
 	})
 }
 
+function drawK(row, col) {
+	board.drawText({
+		fillStyle: '#9cf',
+		strokeStyle: '#25a',
+		strokeWidth: 2,
+		y : rectHeight * (row+0.5),
+		x : rectWidth * (col+0.5),
+		fontSize: 48,
+		fontFamily: 'Verdana, sans-serif',
+		text: 'K'
+});
+}
+
 function drawBoard() {
 	for (r = 0; r < nrows; r++) {
 		for (c = 0; c < ncols; c++) {
@@ -39,9 +52,12 @@ function drawPieces() {
 			if (piece != null) {
 				var style = piece[0]
 				drawCircle(r, c, style)
+				if (piece[1] == 'king')
+					drawK(r, c, "#0F0")
 			}
 		}
 	}
+	
 }
 
 function drawAll() {
