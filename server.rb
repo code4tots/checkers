@@ -4,12 +4,10 @@ require 'uri'
 require_relative 'game'
 
 games = Hash.new
-(0...100).each do |i|
-	games[i.to_s] = Game.new
-end
+games['0'] = Game.new
 
 get '/' do
-	send_file File.join(settings.public_folder, 'index.html')
+	redirect '/game.html'
 end
 
 get '/board/:game_id' do |game_id|
@@ -24,6 +22,9 @@ post '/move/:game_id' do |game_id|
 		games[game_id].move(from, to)
 	rescue CheckersError => e
 		p e
+		e.inspect
+	else
+		'ok'
 	end
 end
 

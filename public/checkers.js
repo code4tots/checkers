@@ -69,8 +69,9 @@ function clickedSquare(row, col) {
 			var move = [[srow,scol], [row, col]]
 			
 			$.post("move/0", {move : move}, function(data) {
-				debugger
+				// debugger
 				console.log("recieved back from server: " + data)
+				$("#message").text(data)
 				srow = -1
 				updateBoard()
 			})

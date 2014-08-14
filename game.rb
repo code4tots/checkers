@@ -5,10 +5,15 @@ class CheckersError < RuntimeError; end
 class InvalidMoveError < CheckersError; end
 class MissingPieceError < CheckersError; end
 class WrongPieceError < CheckersError; end
+class MustJumpError < CheckersError; end
 
 class Game
 	attr_reader :board, :player
 	def initialize
+		reset
+	end
+	
+	def reset
 		@player = :black
 		@board = Board.new
 	end
@@ -20,13 +25,13 @@ class Game
 		raise MissingPieceError.new(from) if piece.nil?
 		
 		# Piece picked is of the wrong color
-		raise WrongPieceError.new(piece) if piece.color != @player
+		raise WrongPieceError.new(piece.to_s) if piece.color != @player
 		
 		jump_move = !possible_jump_moves.empty?
 		
 		# If there is a jump move possible, make sure this move is a jump move
 		if jump_move
-			raise InvalidMoveError.new([from,to]) unless
+			raise MustJumpError.new([from,to]) unless
 				piece.possible_jumps.include?(to)
 		end
 		
