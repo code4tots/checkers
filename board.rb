@@ -24,6 +24,20 @@ class Board
 		end
 	end
 	
+	# Using only arrays and strings so that it may be easily converted
+	# to json
+	def raw_board
+		@rows.map do |row|
+			row.map do |piece|
+				piece.nil? ? nil : [piece.color, piece.type]
+			end
+		end
+	end
+	
+	def to_json
+		raw_board.to_json
+	end
+	
 	def clear
 		(0...height).each do |row|
 			(0...width).each do |col|
@@ -46,7 +60,7 @@ class Board
 	end
 	
 	def pieces
-		@rows.flatten
+		@rows.flatten.compact
 	end
 	
 	def pieces_of_color(color)

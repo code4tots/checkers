@@ -1,6 +1,3 @@
-class InvalidMoveError < RuntimeError
-end
-
 class Piece
 	##### public API #######
 	attr_reader :board, :pos, :color, :type
@@ -33,13 +30,26 @@ class Piece
 	end
 	
 	def perform_moves(moves)
-		raise InvalidMoveError if !valid_move_seq?(moves)
+		raise InvalidMoveError.new(moves) if !valid_move_seq?(moves)
 		perform_moves!(moves)
 	end
 	
 	def to_s
 		color[0] + type[0]
 	end
+	
+	def inspect
+		"[#{to_s}, #{row}, #{col}]"
+	end
+	
+	def possible_jumps
+		move_diffs.map { |ds| ds.map { |d| d * 2 } }.map do |dr, dc|
+			[row + dr, col + dc]
+		end.select do |new_pos|
+			valid_move_seq?([new_pos])
+		end
+	end
+	
 	##### End of public API #######
 	
 	protected
@@ -51,15 +61,6 @@ class Piece
 			valid_move_seq?([new_pos])
 		end
 	end
-	
-	def possible_jumps
-		move_diffs.map { |ds| ds.map { |d| d * 2 } }.map do |dr, dc|
-			[row + dr, col + dc]
-		end.select do |new_pos|
-			valid_move_seq?([new_pos])
-		end
-	end
-	
 	
 	def valid_move_seq?(moves)
 		board.dup[pos].perform_moves!(moves)
