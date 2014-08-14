@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'json'
-require 'uri'
 require_relative 'game'
 
 games = Hash.new
